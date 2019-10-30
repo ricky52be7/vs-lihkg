@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
-const LihkgProvider = require('./LihkgProvider');
+const { create } = require('lihkg-api');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -24,9 +24,11 @@ function activate(context) {
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello World!');
 	});
-	vscode.window.registerTreeDataProvider('lihkg-view', new LihkgProvider())
+	//vscode.window.registerTreeDataProvider('lihkg-view', new LihkgProvider())
 
-	
+	create().then(client => {
+		client.getProperty().then(rst => console.log(rst));
+	});
 	
 
 	context.subscriptions.push(disposable);

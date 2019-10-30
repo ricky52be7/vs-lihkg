@@ -28,14 +28,6 @@
 					"icon": "media/lihkg.svg"
 				}
 			]
-		},
-		"views": {
-			"lihkg": [
-				{
-					"id": "lihkg-view",
-					"name": "LIGHK"
-				}
-			]
 		}
 	},
 	"scripts": {
@@ -51,5 +43,8 @@
 		"mocha": "^6.1.4",
 		"typescript": "^3.3.1",
 		"vscode-test": "^1.2.0"
+	},
+	"dependencies": {
+		"lihkg-api": "^1.0.4"
 	}
 }
