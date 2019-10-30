@@ -1,10 +1,16 @@
 const vscode = require('vscode');
+const { CategoryTreeDataProvider } = require('./providers/CategoryTreeDataProvider');
 
 class LihkgExplorer {
     constructor(context) {
-        //const 
-        //this.viewer = vscode.window.createTreeView('lighkExplorer', )
+        console.log("Creating LihkgExplorer");
+        this.context = context;
+        this.viewer = vscode.window.createTreeView('lihkg-view', {
+            treeDataProvider: new CategoryTreeDataProvider()
+        });   
     }
 }
 
-module.exports.LihkgExplorer = LihkgExplorer;
+module.exports = {
+    LihkgExplorer
+}

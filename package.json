@@ -10,15 +10,12 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onView:lihkg-view"
 	],
 	"main": "./src/extension.js",
 	"contributes": {
 		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			}
+			
 		],
 		"viewsContainers": {
 			"activitybar": [
@@ -26,6 +23,14 @@
 					"id": "lihkg",
 					"title": "LIHKG",
 					"icon": "media/lihkg.svg"
+				}
+			]
+		},
+		"views": {
+			"lihkg": [
+				{
+					"id": "lihkg-view",
+					"name": "Category"
 				}
 			]
 		}

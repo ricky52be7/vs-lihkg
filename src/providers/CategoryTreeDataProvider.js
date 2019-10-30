@@ -1,37 +1,33 @@
 const vscode = require('vscode');
-const Category = require('../models/Category');
+const { create } = require('lihkg-api');
+const { Category } = require('../models/Category');
 
 class CategoryTreeDataProvider {
-    constructor(model) {
+    constructor() {
         this._onDidChangeTreeData = new vscode.EventEmitter();
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
     }
 
     refresh() {
-
+        this._onDidChangeTreeData.fire();
     }
 
     getTreeItem(element) {
-        /*
-        return {
-            resourceUri: element.resurce,
-            collapsibleState: element.isDirectory ? vscode.TreeItemCollapsibleState.Collapsed : void 0,
-            command: element.isDirectory ? void 0 : {
-                command: 'ftpExplorer.openFtpResource',
-                arguments: [element.resource],
-                title: 'Open FTP Resource'
-            }
-        }
-        */
+        return element;
     }
 
     getChildren(element) {
-
-    }
-
-    getParent(element) {
-
+        return create().then(client => {
+            return client.getProperty();
+        }).then(rst => {
+            console.log(rst);
+            return rst.response.category_list.map(category => {
+                return new Category(category.name, vscode.TreeItemCollapsibleState.None);
+            });
+        });
     }
 }
 
-module.exports.CategoryTreeDataProvider = CategoryTreeDataProvider;
+module.exports = {
+    CategoryTreeDataProvider
+}
