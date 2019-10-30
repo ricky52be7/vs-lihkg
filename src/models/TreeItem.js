@@ -3,7 +3,7 @@ const vscode = require('vscode');
 class Category extends vscode.TreeItem {
     constructor(label, collapsibleState, id) {
         super(label, collapsibleState);
-        this.id = id;
+        this.id = id
     }
 }
 
