@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const { create } = require('lihkg-api');
-const { Category, Topic } = require('../models/TreeItem');
+const { Category, SubCategory, Topic, More } = require('../models/TreeItem');
 
 class LihkgTreeDataProvider {
     constructor() {
@@ -19,30 +19,37 @@ class LihkgTreeDataProvider {
     getChildren(element) {
         if (!element) {
             return create().then(client => {
+                console.log('Querying Property...');
                 return client.getProperty();
             }).then(rst => {
-                console.log('Property', rst);
+                console.log(rst);
                 return rst.response.category_list.map(category => {
                     return new Category(
                         category.name,
                         vscode.TreeItemCollapsibleState.Collapsed,
-                        category.cat_id
+                        category.cat_id,
+                        category.sub_category
                     );
                 });
             });
         } else if (element instanceof Category) {
-            return create().then(client => {
-                return client.getTopicList({
-                    cat_id: element.id,
-                    page: 1,
-                    count: 60,
-                    sub_cat_id: -1
-                });
-            }).then(rst => {
-                console.log('Topic', rst);
-                return rst.response.items.map(topic => {
-                    return new Topic(topic.title, vscode.TreeItemCollapsibleState.None);
-                });
+            return element.subCategory.map(subCategory => {
+                return new SubCategory(
+                    subCategory.name,
+                    vscode.TreeItemCollapsibleState.Collapsed,
+                    subCategory.cat_id,
+                    subCategory.sub_cat_id
+                );
+            });
+        } else if (element instanceof SubCategory) {
+            return element.getTopic().then(topics => {
+                let self = this;
+                let result = [...topics];
+                result.push(new More(function() {
+                    element.nextPage();
+                    self._onDidChangeTreeData.fire(element);
+                }));
+                return result;
             });
         }
 

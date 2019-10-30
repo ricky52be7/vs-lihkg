@@ -28,7 +28,6 @@ function activate(context) {
 	*/
 
 	//context.subscriptions.push(disposable);
-
 	new LihkgExplorer(context);
 }
 exports.activate = activate;
