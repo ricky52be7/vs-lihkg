@@ -51,46 +51,73 @@ class Topic extends vscode.TreeItem {
             arguments: [this]
         };
         this.threadId = threadId;
+        this.page = 1;
+        this.pageTheadhold = 10;
+        this.downloading = false;
+        this.posts = [];
     }
 
-    provideTextDocumentContent(uri, token) {
-        return uri.path;
-    }
-
-    showTopic() {
-        create().then(client => {
+    download() {
+        this.downloading = true;
+        return create().then(client => {
             return client.getThreadContent({
                 thread_id: this.threadId,
-                page: 1,
+                page: this.page,
                 order: PostOrder
-            })
-        }).then(rst => {
-            return rst.response;
-        }).then(async (thread) => {
-            let uri = vscode.Uri.parse(`vs-lihkg:${this.getContent(thread)}\n//${this.label}`, true);
-            let doc = await vscode.workspace.openTextDocument(uri);
-            await vscode.window.showTextDocument(doc, { preview: false });
-
-            vscode.window.onDidChangeTextEditorVisibleRanges((event) => {
-                let textEditor = event.textEditor;
-                if (textEditor.document.uri.scheme != "vs-lihkg") {
-                    return;
-                }
-                if ((textEditor.visibleRanges[0].end.line - 10) < textEditor.document.lineCount) {
-                    console.log("document end");
-                }
             });
+        }).then(rst => {
+            this.posts = this.posts.concat(rst.response.item_data);
         });
     }
 
-    getContent(thread) {
+    showTopic() {
+        this.download().then(async () => {
+            let uri = vscode.Uri.parse(this.getContent(), true);
+            let doc = await vscode.workspace.openTextDocument(uri);
+            await vscode.window.showTextDocument(doc, { preview: false });
+        }).then(() => {
+            this.downloading = false;
+            //this.addTextEditorVisibleRangesListener();
+        });
+    }
+
+    async update(textEditor, document) {
+        let currentRange = textEditor.visibleRanges[0];
+        this.page++;
+        this.download().then(async () => {
+            let newContent = this.getContent().replace("vs-lihkg:", "");
+            return textEditor.edit((editBuilder) => {
+                editBuilder.replace(new vscode.Range(0, 0, document.lineCount, this.label.length + 2), newContent);
+            });
+            //await vscode.window.showTextDocument(newUri, { preview: false });
+        }).then((success) => {
+            this.downloading = false;
+            //textEditor.revealRange(currentRange);
+        });
+    }
+
+    addTextEditorVisibleRangesListener() {
+        let self = this;
+        vscode.window.onDidChangeTextEditorVisibleRanges(async (event) => {
+            let textEditor = event.textEditor;
+            //console.log(textEditor.document.uri.scheme);
+            if (textEditor.document.uri.scheme != "vs-lihkg") {
+                return;
+            }
+            if ((textEditor.visibleRanges[0].end.line > textEditor.document.lineCount - self.pageTheadhold) && !self.downloading) {
+                await self.update(textEditor, textEditor.document);
+            }
+        });
+    }
+
+    getContent() {
         //console.log(thread);
-        let doc = thread.item_data.map(data => {
+        let doc = this.posts.map(data => {
             //console.log(data);
-            return `\t${data.user_nickname}() {\n\t\t${htmlToText.fromString(data.msg).replace(/\n/g, '\n\t\t')}\n\t}`
+            return `\t${data.user_nickname}() {\n\t\t${htmlToText.fromString(data.msg).replace(/\n/g, '\n\t\t').replace(/\?/g, "%3F").replace(/#/g, "%23")}\n\t}`
         }).join('\n\n');
 
-        return (`public class ${this.label} {\n${doc}\n}`);
+        return `vs-lihkg:public class ${this.label} {\n${doc}\n}\n\n//${this.label}`;
     }
 }
 
