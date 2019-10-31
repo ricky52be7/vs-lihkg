@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const { LihkgTreeDataProvider } = require('./providers/TreeDataProvider');
-const { Topic } = require('./models/TreeItem');
+const { LihkgTextDocContentProvider } = require('./providers/ContentProvider');
 
 class LihkgExplorer {
     constructor(context) {
@@ -14,7 +14,7 @@ class LihkgExplorer {
         vscode.commands.registerCommand('Topic.showTopic', (topic) => topic.showTopic());
 
         const scheme = "vs-lihkg";
-        vscode.workspace.registerTextDocumentContentProvider(scheme, new Topic);
+        vscode.workspace.registerTextDocumentContentProvider(scheme, new LihkgTextDocContentProvider);
         //this.context.subscriptions.push();
     }
 }

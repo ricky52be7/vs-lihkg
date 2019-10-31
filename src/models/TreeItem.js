@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const { create, PostOrder } = require('lihkg-api');
+const htmlToText = require('html-to-text');
 class Category extends vscode.TreeItem {
     constructor(label, collapsibleState, catId, subCategory) {
         super(label, collapsibleState);
@@ -66,15 +67,23 @@ class Topic extends vscode.TreeItem {
         }).then(rst => {
             return rst.response;
         }).then(async (thread) => {
-            let uri = vscode.Uri.parse(`vs-lihkg:${this.getContent(thread)}\n/${this.label}`, true);
+            let uri = vscode.Uri.parse(`vs-lihkg:${this.getContent(thread)}\n//${this.label}`, true);
             let doc = await vscode.workspace.openTextDocument(uri);
             await vscode.window.showTextDocument(doc, { preview: false });
         });
     }
 
     getContent(thread) {
-        console.log(thread);
-        return thread.item_data.map(data => data.msg).join('\n');
+        //console.log(thread);
+        let doc = thread.item_data.map(data => {
+            //console.log(data);
+            return `
+    ${data.user_nickname}() {
+        ${htmlToText.fromString(data.msg).replace(/\n/g, '\n\t\t')}
+    }
+    `
+        }).join('\n');
+        return (doc);
     }
 }
 
