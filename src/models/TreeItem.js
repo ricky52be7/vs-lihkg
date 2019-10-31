@@ -70,6 +70,16 @@ class Topic extends vscode.TreeItem {
             let uri = vscode.Uri.parse(`vs-lihkg:${this.getContent(thread)}\n//${this.label}`, true);
             let doc = await vscode.workspace.openTextDocument(uri);
             await vscode.window.showTextDocument(doc, { preview: false });
+
+            vscode.window.onDidChangeTextEditorVisibleRanges((event) => {
+                let textEditor = event.textEditor;
+                if (textEditor.document.uri.scheme != "vs-lihkg") {
+                    return;
+                }
+                if ((textEditor.visibleRanges[0].end.line - 10) < textEditor.document.lineCount) {
+                    console.log("document end");
+                }
+            });
         });
     }
 
@@ -77,13 +87,10 @@ class Topic extends vscode.TreeItem {
         //console.log(thread);
         let doc = thread.item_data.map(data => {
             //console.log(data);
-            return `
-    ${data.user_nickname}() {
-        ${htmlToText.fromString(data.msg).replace(/\n/g, '\n\t\t')}
-    }
-    `
-        }).join('\n');
-        return (doc);
+            return `\t${data.user_nickname}() {\n\t\t${htmlToText.fromString(data.msg).replace(/\n/g, '\n\t\t')}\n\t}`
+        }).join('\n\n');
+
+        return (`public class ${this.label} {\n${doc}\n}`);
     }
 }
 
