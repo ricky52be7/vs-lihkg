@@ -15,7 +15,6 @@ class LihkgExplorer {
 
         const scheme = "vs-lihkg";
         vscode.workspace.registerTextDocumentContentProvider(scheme, new LihkgTextDocContentProvider);
-        //this.context.subscriptions.push();
     }
 }
 

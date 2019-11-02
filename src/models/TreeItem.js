@@ -1,6 +1,6 @@
 const vscode = require('vscode');
-const { create, PostOrder } = require('lihkg-api');
-const htmlToText = require('html-to-text');
+const { create } = require('lihkg-api');
+
 class Category extends vscode.TreeItem {
     constructor(label, collapsibleState, catId, subCategory) {
         super(label, collapsibleState);
@@ -52,72 +52,12 @@ class Topic extends vscode.TreeItem {
         };
         this.threadId = threadId;
         this.page = 1;
-        this.pageTheadhold = 10;
-        this.downloading = false;
-        this.posts = [];
     }
 
-    download() {
-        this.downloading = true;
-        return create().then(client => {
-            return client.getThreadContent({
-                thread_id: this.threadId,
-                page: this.page,
-                order: PostOrder
-            });
-        }).then(rst => {
-            this.posts = this.posts.concat(rst.response.item_data);
-        });
-    }
-
-    showTopic() {
-        this.download().then(async () => {
-            let uri = vscode.Uri.parse(this.getContent(), true);
-            let doc = await vscode.workspace.openTextDocument(uri);
-            await vscode.window.showTextDocument(doc, { preview: false });
-        }).then(() => {
-            this.downloading = false;
-            //this.addTextEditorVisibleRangesListener();
-        });
-    }
-
-    async update(textEditor, document) {
-        let currentRange = textEditor.visibleRanges[0];
-        this.page++;
-        this.download().then(async () => {
-            let newContent = this.getContent().replace("vs-lihkg:", "");
-            return textEditor.edit((editBuilder) => {
-                editBuilder.replace(new vscode.Range(0, 0, document.lineCount, this.label.length + 2), newContent);
-            });
-            //await vscode.window.showTextDocument(newUri, { preview: false });
-        }).then((success) => {
-            this.downloading = false;
-            //textEditor.revealRange(currentRange);
-        });
-    }
-
-    addTextEditorVisibleRangesListener() {
-        let self = this;
-        vscode.window.onDidChangeTextEditorVisibleRanges(async (event) => {
-            let textEditor = event.textEditor;
-            //console.log(textEditor.document.uri.scheme);
-            if (textEditor.document.uri.scheme != "vs-lihkg") {
-                return;
-            }
-            if ((textEditor.visibleRanges[0].end.line > textEditor.document.lineCount - self.pageTheadhold) && !self.downloading) {
-                await self.update(textEditor, textEditor.document);
-            }
-        });
-    }
-
-    getContent() {
-        //console.log(thread);
-        let doc = this.posts.map(data => {
-            //console.log(data);
-            return `\t${data.user_nickname}() {\n\t\t${htmlToText.fromString(data.msg).replace(/\n/g, '\n\t\t').replace(/\?/g, "%3F").replace(/#/g, "%23")}\n\t}`
-        }).join('\n\n');
-
-        return `vs-lihkg:public class ${this.label} {\n${doc}\n}\n\n//${this.label}`;
+    async showTopic() {
+        let uri = vscode.Uri.parse(`vs-lihkg:${this.threadId}`);
+        let doc = await vscode.workspace.openTextDocument(uri);
+        await vscode.window.showTextDocument(doc, {preview: true});
     }
 }
 
