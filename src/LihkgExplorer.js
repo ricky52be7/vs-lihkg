@@ -12,6 +12,7 @@ class LihkgExplorer {
 
         vscode.commands.registerCommand('More.more', (more) => more.callback());
         vscode.commands.registerCommand('Topic.showTopic', (topic) => topic.showTopic());
+        vscode.commands.registerCommand('lihkg.nextPage', (v) => console.log(v));
 
         const scheme = "vs-lihkg";
         vscode.workspace.registerTextDocumentContentProvider(scheme, new LihkgTextDocContentProvider);

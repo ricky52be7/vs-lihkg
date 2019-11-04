@@ -14,7 +14,12 @@
 	],
 	"main": "./src/extension.js",
 	"contributes": {
-		"commands": [],
+		"commands": [
+			{
+				"command": "lihkg.nextPage",
+				"title": "Next Page"
+			}
+		],
 		"viewsContainers": {
 			"activitybar": [
 				{
@@ -29,6 +34,15 @@
 				{
 					"id": "lihkg-view",
 					"name": "Category"
+				}
+			]
+		},
+		"menus": {
+			"editor/title": [
+				{
+					"command": "lihkg.nextPage",
+					"group": "navigation",
+					"when": "resourceScheme == vs-lihkg"
 				}
 			]
 		}
