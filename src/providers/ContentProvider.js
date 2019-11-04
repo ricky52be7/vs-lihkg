@@ -9,14 +9,16 @@ class LihkgTextDocContentProvider {
     }
 
     provideTextDocumentContent(uri, token) {
-        return this.getContent(uri);
+        return this.getContent(uri.path);
     }
 
-    getContent(uri) {
+    getContent(path) {
+        let id = path.split(":")[0];
+        let page = path.split(":")[1];
         return create().then(client => {
             return client.getThreadContent({
-                thread_id: uri.path.split(":")[0],
-                page: 1,
+                thread_id: id,
+                page: page,
                 order: PostOrder
             });
         }).then(rst => {

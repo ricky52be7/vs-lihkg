@@ -16,8 +16,20 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "lihkg.nextPage",
-				"title": "Next Page"
+				"command": "vs-lihkg.topic.nextPage",
+				"title": "Next Page",
+				"icon": {
+					"light": "media/light/arrow-right.svg",
+					"dark": "media/dark/arrow-right.svg"
+				}
+			},
+			{
+				"command": "vs-lihkg.topic.previousPage",
+				"title": "Previous Page",
+				"icon": {
+					"light": "media/light/arrow-left.svg",
+					"dark": "media/dark/arrow-left.svg"
+				}
 			}
 		],
 		"viewsContainers": {
@@ -35,12 +47,17 @@
 					"id": "lihkg-view",
 					"name": "Category"
 				}
-			]
+			] 
 		},
 		"menus": {
 			"editor/title": [
 				{
-					"command": "lihkg.nextPage",
+					"command": "vs-lihkg.topic.previousPage",
+					"group": "navigation",
+					"when": "resourceScheme == vs-lihkg"
+				},
+				{
+					"command": "vs-lihkg.topic.nextPage",
 					"group": "navigation",
 					"when": "resourceScheme == vs-lihkg"
 				}

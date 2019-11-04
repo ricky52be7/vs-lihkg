@@ -30,9 +30,13 @@ class SubCategory extends vscode.TreeItem {
             });
         }).then(rst => {
             console.log(rst);
-            rst.response.items.forEach(topic => {
-                this.topics.push(new Topic(topic.title, vscode.TreeItemCollapsibleState.None, topic.thread_id));
-            });
+            if (rst.success == 1) {
+                rst.response.items.forEach(topic => {
+                    this.topics.push(new Topic(topic.title, vscode.TreeItemCollapsibleState.None, topic.thread_id));
+                });
+            } else {
+                vscode.window.showErrorMessage(rst.error_message);
+            }
             return this.topics;
         }); 
     }
@@ -46,7 +50,7 @@ class Topic extends vscode.TreeItem {
     constructor(label, collapsibleState, threadId) {
         super(label, collapsibleState);
         this.command = {
-            command: 'Topic.showTopic',
+            command: 'vs-lihkg.topic.showTopic',
             title: '',
             arguments: [this]
         };
@@ -55,18 +59,9 @@ class Topic extends vscode.TreeItem {
     }
 
     async showTopic() {
-        let uri = vscode.Uri.parse(`vs-lihkg:${this.threadId}`);
+        let uri = vscode.Uri.parse(`vs-lihkg:${this.threadId}:${this.page}`);
         let doc = await vscode.workspace.openTextDocument(uri);
         await vscode.window.showTextDocument(doc, {preview: true});
-        try {
-            vscode.commands.registerCommand('lihkg.nextPage', (v) => {
-                //console.log(v);
-                this.page++;
-                this.showTopic();
-            }, this);
-        } catch(e) {
-            console.log(e);
-        }
     }
 }
 
@@ -75,7 +70,7 @@ class More extends vscode.TreeItem {
         super("More...", vscode.TreeItemCollapsibleState.None);
         this.callback = callback;
         this.command = {
-            command: 'More.more',
+            command: 'vs-lihkg.more.more',
             title: '',
             arguments: [this]
         };
