@@ -58,6 +58,15 @@ class Topic extends vscode.TreeItem {
         let uri = vscode.Uri.parse(`vs-lihkg:${this.threadId}`);
         let doc = await vscode.workspace.openTextDocument(uri);
         await vscode.window.showTextDocument(doc, {preview: true});
+        try {
+            vscode.commands.registerCommand('lihkg.nextPage', (v) => {
+                //console.log(v);
+                this.page++;
+                this.showTopic();
+            }, this);
+        } catch(e) {
+            console.log(e);
+        }
     }
 }
 

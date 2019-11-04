@@ -15,7 +15,7 @@ class LihkgTextDocContentProvider {
     getContent(uri) {
         return create().then(client => {
             return client.getThreadContent({
-                thread_id: uri.path,
+                thread_id: uri.path.split(":")[0],
                 page: 1,
                 order: PostOrder
             });
