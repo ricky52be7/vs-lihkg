@@ -3,6 +3,7 @@
 	"displayName": "vs-lihkg",
 	"description": "",
 	"version": "0.0.1",
+	"publisher": "vsce-ricky-yung",
 	"engines": {
 		"vscode": "^1.39.0"
 	},
