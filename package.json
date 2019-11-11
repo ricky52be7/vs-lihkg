@@ -16,19 +16,19 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "vs-lihkg.topic.nextPage",
-				"title": "Next Page",
-				"icon": {
-					"light": "media/light/arrow-right.svg",
-					"dark": "media/dark/arrow-right.svg"
-				}
-			},
-			{
 				"command": "vs-lihkg.topic.previousPage",
 				"title": "Previous Page",
 				"icon": {
 					"light": "media/light/arrow-left.svg",
 					"dark": "media/dark/arrow-left.svg"
+				}
+			},
+			{
+				"command": "vs-lihkg.topic.nextPage",
+				"title": "Next Page",
+				"icon": {
+					"light": "media/light/arrow-right.svg",
+					"dark": "media/dark/arrow-right.svg"
 				}
 			}
 		],
@@ -53,13 +53,13 @@
 			"editor/title": [
 				{
 					"command": "vs-lihkg.topic.previousPage",
-					"group": "navigation",
-					"when": "resourceScheme == vs-lihkg"
+					"group": "navigation@1",
+					"when": "resourceScheme == vs-lihkg && !vs-lihkg:firstPage",
 				},
 				{
 					"command": "vs-lihkg.topic.nextPage",
-					"group": "navigation",
-					"when": "resourceScheme == vs-lihkg"
+					"group": "navigation@2",
+					"when": "resourceScheme == vs-lihkg && !vs-lihkg:maxPage",
 				}
 			]
 		}

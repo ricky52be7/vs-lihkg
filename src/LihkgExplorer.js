@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const { LihkgTreeDataProvider } = require('./providers/TreeDataProvider');
 const { LihkgTextDocContentProvider } = require('./providers/ContentProvider');
+const { CommandContext } = require('./constants');
 
 class LihkgExplorer {
     constructor(context) {
@@ -30,23 +31,28 @@ class LihkgExplorer {
     async nextPage(content) {
         console.log(content);
         let { document } = vscode.window.activeTextEditor;
-        let path = document.uri.path;
-        let threadId = path.split(":")[0];
-        let page = Number(path.split(":")[1]);
+        let dataArray = document.uri.path.split(":");
+        let threadId = dataArray[0];
+        let page = Number(dataArray[1]);
+        let totalPage = Number(dataArray[2]);
         page++;
-        let newUri = document.uri.with({ path: `${threadId}:${page}` });
+        await vscode.commands.executeCommand("setContext", CommandContext.maxPage, (totalPage <= page));
+        await vscode.commands.executeCommand("setContext", CommandContext.firstPage, (1 == page));
+        let newUri = document.uri.with({ path: `${threadId}:${page}:${totalPage}` });
         await vscode.window.showTextDocument(newUri, { preview: true });
     }
 
     async previousPage(content) {
         console.log(content);
         let { document } = vscode.window.activeTextEditor;
-        let path = document.uri.path;
-        let threadId = path.split(":")[0];
-        let page = Number(path.split(":")[1]);
-        if (page > 1) page--;
-        else vscode.window.showErrorMessage("This is the first page");
-        let newUri = document.uri.with({ path: `${threadId}:${page}` });
+        let dataArray = document.uri.path.split(":");
+        let threadId = dataArray[0];
+        let page = Number(dataArray[1]);
+        let totalPage = Number(dataArray[2]);
+        page--;
+        await vscode.commands.executeCommand("setContext", CommandContext.maxPage, (totalPage <= page));
+        await vscode.commands.executeCommand("setContext", CommandContext.firstPage, (1 == page));
+        let newUri = document.uri.with({ path: `${threadId}:${page}:${totalPage}` });
         await vscode.window.showTextDocument(newUri, { preview: true });
     }
 }
