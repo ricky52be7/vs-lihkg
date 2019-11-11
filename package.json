@@ -54,12 +54,12 @@
 				{
 					"command": "vs-lihkg.topic.previousPage",
 					"group": "navigation@1",
-					"when": "resourceScheme == vs-lihkg && !vs-lihkg:firstPage",
+					"when": "resourceScheme == vs-lihkg && !vs-lihkg:firstPage"
 				},
 				{
 					"command": "vs-lihkg.topic.nextPage",
 					"group": "navigation@2",
-					"when": "resourceScheme == vs-lihkg && !vs-lihkg:maxPage",
+					"when": "resourceScheme == vs-lihkg && !vs-lihkg:maxPage"
 				}
 			]
 		}
