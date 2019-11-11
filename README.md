@@ -4,13 +4,13 @@ This is for browsing LIHKG in vs-code when you in office.
 
 ## How to install
 
-1. download the project and find vs-lihkg-0.0.1.vsix in root folder.
-2. Open the Extensions tab and click "install from VSIX" and select above file
-3. enjoy!
+1. download vs-lihkg-[version no].vsix from [here](https://drive.google.com/file/d/1eqLTECt5POd0xpY-z1WS6uJVY7d_-MZn/view?usp=sharing).
+1. Open the Extensions tab and click "install from VSIX" and select above file
+1. enjoy!
 
 ## Features
 
-Only browsing LIHKG only in this time. For the further feather have not designed. Welcome to suggest.
+Browsing LIHKG only in this time. For the further feather have not designed. Welcome to suggest.
 
 ## Requirements
 
