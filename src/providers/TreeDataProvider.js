@@ -42,8 +42,12 @@ class LihkgTreeDataProvider {
                 );
             });
         } else if (element instanceof SubCategory) {
+            let self = this;
+            element.setRefreshCallback(function() {
+                self._onDidChangeTreeData.fire();
+            });
             return element.getTopic().then(topics => {
-                let self = this;
+                //let self = this;
                 let result = [...topics];
                 result.push(new More(function() {
                     element.nextPage();

@@ -13,6 +13,8 @@ class Category extends vscode.TreeItem {
 class SubCategory extends vscode.TreeItem {
     constructor(label, collapsibleState, catId, subId) {
         super(label, collapsibleState);
+        this.contextValue = "subCategory";
+        this.refreshCallback = null;
         this.catId = catId;
         this.subId = subId;
         this.page = 1;
@@ -44,6 +46,21 @@ class SubCategory extends vscode.TreeItem {
     nextPage() {
         this.page++;
         return this.getTopic();
+    }
+
+    refresh() {
+        this.topics = [];
+        this.page = 1;
+        let self = this;
+        return this.getTopic().then(topics => {
+            if (self.refreshCallback != null) {
+                self.refreshCallback();
+            }
+        });
+    }
+
+    setRefreshCallback(refreshCallback) {
+        this.refreshCallback = refreshCallback;
     }
 }
 class Topic extends vscode.TreeItem {

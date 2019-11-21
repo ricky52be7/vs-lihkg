@@ -31,6 +31,14 @@
 					"light": "media/light/arrow-right.svg",
 					"dark": "media/dark/arrow-right.svg"
 				}
+			},
+			{
+				"command": "vs-lihkg.topic.refresh",
+				"title": "Refresh",
+				"icon": {
+					"light": "media/light/refresh.svg",
+					"dark": "media/dark/refresh.svg"
+				}
 			}
 		],
 		"viewsContainers": {
@@ -61,6 +69,13 @@
 					"command": "vs-lihkg.topic.nextPage",
 					"group": "navigation@2",
 					"when": "resourceScheme == vs-lihkg && !vs-lihkg:maxPage"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "vs-lihkg.topic.refresh",
+					"group": "inline",
+					"when": "view == lihkg-view && viewItem == subCategory"
 				}
 			]
 		}
