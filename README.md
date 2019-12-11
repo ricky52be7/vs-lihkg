@@ -2,11 +2,11 @@
 
 A vscode extension for browsing LIHKG 
 
-## How to install
+<!-- ## How to install
 
 1. download vs-lihkg-[version no].vsix from [here](https://drive.google.com/file/d/1eqLTECt5POd0xpY-z1WS6uJVY7d_-MZn/view?usp=sharing).
 1. Open the Extensions tab and click "install from VSIX" and select above file
-1. enjoy!
+1. enjoy! -->
 
 ## Features
 
@@ -26,9 +26,9 @@ None -->
 
 ## Release Notes
 
-0.0.1 initial version
+0.1.0 initial version
 
-### 0.0.1
+### 0.1.0
 - initial version
 
 -----------------------------------------------------------------------------------------------------------
