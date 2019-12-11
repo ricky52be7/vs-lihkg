@@ -1,7 +1,7 @@
 {
 	"name": "vs-lihkg",
 	"displayName": "LIHKG Viewer",
-	"description": "A LIHKG extension for vscode",
+	"description": "A vscode extension for browsing LIHKG",
 	"version": "0.1.0",
 	"publisher": "Ricky Yung",
 	"icon": "media/icon.png",

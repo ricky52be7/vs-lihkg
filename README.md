@@ -1,6 +1,6 @@
-# vs-lihkg README
+# LIHKG Viewer README
 
-This is for browsing LIHKG in vs-code when you in office. 
+A vscode extension for browsing LIHKG 
 
 ## How to install
 
@@ -16,13 +16,13 @@ Browsing LIHKG only in this time. For the further feather have not designed. Wel
 
 vs-code version >= 1.39.0
 
-## Extension Settings
+<!-- ### Extension Settings
 
-None
+#None
 
 ## Known Issues
 
-None
+None -->
 
 ## Release Notes
 
