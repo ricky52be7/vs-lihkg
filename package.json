@@ -1,9 +1,11 @@
 {
 	"name": "vs-lihkg",
-	"displayName": "vs-lihkg",
-	"description": "",
-	"version": "0.0.1",
-	"publisher": "vsce-ricky-yung",
+	"displayName": "LIHKG Viewer",
+	"description": "A LIHKG extension for vscode",
+	"version": "0.1.0",
+	"publisher": "Ricky Yung",
+	"icon": "media/icon.png",
+	"keywords": ["LIHKG", "forum", "funny"],
 	"engines": {
 		"vscode": "^1.39.0"
 	},
@@ -56,7 +58,7 @@
 					"id": "lihkg-view",
 					"name": "Category"
 				}
-			] 
+			]
 		},
 		"menus": {
 			"editor/title": [
