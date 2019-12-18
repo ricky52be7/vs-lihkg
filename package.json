@@ -47,6 +47,10 @@
 					"light": "media/light/refresh.svg",
 					"dark": "media/dark/refresh.svg"
 				}
+			},
+			{
+				"command": "vs-lihkg.topic.openInBrowser",
+				"title": "Open in browser"
 			}
 		],
 		"viewsContainers": {
@@ -84,6 +88,10 @@
 					"command": "vs-lihkg.topic.refresh",
 					"group": "inline",
 					"when": "view == lihkg-view && viewItem == subCategory"
+				},
+				{
+					"command": "vs-lihkg.topic.openInBrowser",
+					"when": "view == lihkg-view && viewItem == topic"
 				}
 			]
 		}

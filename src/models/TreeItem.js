@@ -66,6 +66,7 @@ class SubCategory extends vscode.TreeItem {
 class Topic extends vscode.TreeItem {
     constructor(label, collapsibleState, threadId, totalPage) {
         super(label, collapsibleState);
+        this.contextValue = "topic";
         this.command = {
             command: 'vs-lihkg.topic.showTopic',
             title: '',
@@ -80,6 +81,11 @@ class Topic extends vscode.TreeItem {
         let uri = vscode.Uri.parse(`vs-lihkg:${this.threadId}:${this.page}:${this.totalPage}`);
         let doc = await vscode.workspace.openTextDocument(uri);
         await vscode.window.showTextDocument(doc, {preview: true});
+    }
+
+    openInBrowser() {
+        let uri = vscode.Uri.parse(`https://lihkg.com/thread/${this.threadId}`);
+        vscode.commands.executeCommand("vscode.open", uri);
     }
 }
 

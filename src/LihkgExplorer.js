@@ -17,7 +17,8 @@ class LihkgExplorer {
         vscode.commands.registerCommand('vs-lihkg.topic.showTopic', this.showTopic);
         vscode.commands.registerCommand('vs-lihkg.topic.nextPage', this.nextPage);
         vscode.commands.registerCommand('vs-lihkg.topic.previousPage', this.previousPage);
-        vscode.commands.registerCommand('vs-lihkg.topic.refresh', this.refresh)
+        vscode.commands.registerCommand('vs-lihkg.topic.refresh', this.refresh);
+        vscode.commands.registerCommand('vs-lihkg.topic.openInBrowser', this.openInBrowser);
 
         const scheme = "vs-lihkg";
         vscode.workspace.registerTextDocumentContentProvider(scheme, new LihkgTextDocContentProvider);
@@ -61,6 +62,10 @@ class LihkgExplorer {
 
     refresh(topic) {
         topic.refresh();
+    }
+
+    openInBrowser(topic) {
+        topic.openInBrowser();
     }
 }
 
