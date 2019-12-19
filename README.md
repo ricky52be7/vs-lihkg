@@ -1,6 +1,6 @@
 # LIHKG Viewer README
 
-A vscode extension for browsing LIHKG 
+A vscode extension for browsing LIHKG in JAVA style.
 
 <!-- ## How to install
 
@@ -10,7 +10,7 @@ A vscode extension for browsing LIHKG
 
 ## Features
 
-Browsing LIHKG only in this time. For the further feather have not designed. Welcome to suggest.
+Browsing LIHKG in JAVA style. For the further feather have not designed. Welcome to suggest.
 
 ## Requirements
 
@@ -26,7 +26,9 @@ None -->
 
 ## Release Notes
 
-0.1.1 initial version
+### 0.2.0
+- add "open in browser"
+- add current page at status bar, click this to jump page
 
 ### 0.1.1
 - initial version

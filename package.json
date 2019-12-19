@@ -8,7 +8,7 @@
 	"repository": {
 		"url": "https://github.com/yungchunkan/vs-lihkg"
 	},
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"publisher": "ricky52be7",
 	"icon": "media/icon.png",
 	"keywords": ["LIHKG", "forum", "funny"],
@@ -51,6 +51,10 @@
 			{
 				"command": "vs-lihkg.topic.openInBrowser",
 				"title": "Open in browser"
+			},
+			{
+				"command": "vs-lihkg.topic.jumpPage",
+				"title": "Jump Page"
 			}
 		],
 		"viewsContainers": {
