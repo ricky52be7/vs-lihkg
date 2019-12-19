@@ -8,6 +8,9 @@ class LihkgExplorer {
     constructor(context) {
         console.log("Creating LihkgExplorer");
         this.updateStatusBarItem = this.updateStatusBarItem.bind(this);
+        this.nextPage = this.nextPage.bind(this);
+        this.previousPage = this.previousPage.bind(this);
+        this.jumpPage = this.jumpPage.bind(this);
 
         this.context = context;
         this.viewer = vscode.window.createTreeView('lihkg-view', {
@@ -45,6 +48,13 @@ class LihkgExplorer {
         }
     }
 
+    async showPage(threadId, totalPage, page) {
+        await vscode.commands.executeCommand("setContext", CommandContext.maxPage, (totalPage <= page));
+        await vscode.commands.executeCommand("setContext", CommandContext.firstPage, (1 == page));
+        let newUri = document.uri.with({ path: `${threadId}:${page}:${totalPage}` });
+        await vscode.window.showTextDocument(newUri, { preview: true });
+    }
+
     more(more) {
         more.callback();
     }
@@ -61,10 +71,7 @@ class LihkgExplorer {
         let page = Number(dataArray[1]);
         let totalPage = Number(dataArray[2]);
         page++;
-        await vscode.commands.executeCommand("setContext", CommandContext.maxPage, (totalPage <= page));
-        await vscode.commands.executeCommand("setContext", CommandContext.firstPage, (1 == page));
-        let newUri = document.uri.with({ path: `${threadId}:${page}:${totalPage}` });
-        await vscode.window.showTextDocument(newUri, { preview: true });
+        this.showPage(threadId, totalPage, page);
     }
 
     async previousPage(content) {
@@ -75,10 +82,7 @@ class LihkgExplorer {
         let page = Number(dataArray[1]);
         let totalPage = Number(dataArray[2]);
         page--;
-        await vscode.commands.executeCommand("setContext", CommandContext.maxPage, (totalPage <= page));
-        await vscode.commands.executeCommand("setContext", CommandContext.firstPage, (1 == page));
-        let newUri = document.uri.with({ path: `${threadId}:${page}:${totalPage}` });
-        await vscode.window.showTextDocument(newUri, { preview: true });
+        this.showPage(threadId, totalPage, page);
     }
 
     refresh(topic) {
@@ -105,10 +109,7 @@ class LihkgExplorer {
         console.log(targetPage);
         page = Number(targetPage);
 
-        await vscode.commands.executeCommand("setContext", CommandContext.maxPage, (totalPage <= page));
-        await vscode.commands.executeCommand("setContext", CommandContext.firstPage, (1 == page));
-        let newUri = document.uri.with({ path: `${threadId}:${page}:${totalPage}` });
-        await vscode.window.showTextDocument(newUri, { preview: true });
+        this.showPage(threadId, totalPage, page);
     }
 }
 
