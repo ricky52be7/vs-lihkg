@@ -49,6 +49,7 @@ class LihkgExplorer {
     }
 
     async showPage(threadId, totalPage, page) {
+        let document = vscode.window.activeTextEditor.document;
         await vscode.commands.executeCommand("setContext", CommandContext.maxPage, (totalPage <= page));
         await vscode.commands.executeCommand("setContext", CommandContext.firstPage, (1 == page));
         let newUri = document.uri.with({ path: `${threadId}:${page}:${totalPage}` });

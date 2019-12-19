@@ -2,6 +2,8 @@
 
 A vscode extension for browsing LIHKG in JAVA style.
 
+![](images/vscode-1576740187249.gif)
+
 <!-- ## How to install
 
 1. download vs-lihkg-[version no].vsix from [here](https://drive.google.com/file/d/1eqLTECt5POd0xpY-z1WS6uJVY7d_-MZn/view?usp=sharing).
