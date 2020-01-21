@@ -33,11 +33,15 @@ class LihkgTextDocContentProvider {
             return vscode.commands.executeCommand("setContext", CommandContext.firstPage, (1 == page));
         }).then(() => {
             let reply = result.response.item_data.map(data => {
-                return `\t${data.user_nickname}() {\n\t\t${htmlToText.fromString(data.msg).replace(/\n/g, '\n\t\t')}\n\t}`;
+                return `\t${data.user_nickname}() {\n\t\t// ${this.formatDate(data.reply_time)}\n\t\t${htmlToText.fromString(data.msg).replace(/\n/g, '\n\t\t')}\n\t}`;
             }).join('\n\n');
 
             return `public class ${result.response.title} {\n${reply}\n}`;
         });
+    }
+
+    formatDate(replayTime) {
+        return new Date(Number(replayTime) * 1000).toString();
     }
 }
 
