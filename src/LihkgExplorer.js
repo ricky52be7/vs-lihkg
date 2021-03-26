@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const { LihkgTreeDataProvider } = require('./providers/TreeDataProvider');
 const { LihkgTextDocContentProvider } = require('./providers/ContentProvider');
-const { CommandContext, Constants, languageId } = require('./constants');
+const { CommandContext, Constants } = require('./constants');
 
 class LihkgExplorer {
 
@@ -52,8 +52,8 @@ class LihkgExplorer {
 
         await vscode.commands.executeCommand("setContext", CommandContext.maxPage, (totalPage <= page));
         await vscode.commands.executeCommand("setContext", CommandContext.firstPage, (1 == page));
-        await vscode.window.showTextDocument(newUri, { preview: true });
-        await vscode.languages.setTextDocumentLanguage(document, languageId);
+        await vscode.commands.executeCommand("markdown.showPreview", newUri);
+
     }
 
     more(more) {
