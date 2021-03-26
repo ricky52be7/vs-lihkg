@@ -1,7 +1,15 @@
 const vscode = require('vscode');
 const { LihkgTreeDataProvider } = require('./providers/TreeDataProvider');
 const { LihkgTextDocContentProvider } = require('./providers/ContentProvider');
-const { CommandContext, Constants } = require('./constants');
+const { CommandContext, Constants, languageId } = require('./constants');
+
+async function updateDocumentLang() {
+    const document = vscode.window.activeTextEditor?.document;
+
+    if (document?.uri?.scheme != Constants.SCHEME)
+        return
+    await vscode.languages.setTextDocumentLanguage(document, languageId);
+}
 
 class LihkgExplorer {
 
@@ -20,7 +28,7 @@ class LihkgExplorer {
         this.statusBarView = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
         this.statusBarView.command = 'vs-lihkg.topic.jumpPage';
         vscode.window.onDidChangeActiveTextEditor(this.updateStatusBarItem)
-        //this.updateStatusBarItem();
+        const _updateLangDisposable = vscode.window.onDidChangeActiveTextEditor(updateDocumentLang)
 
 
         vscode.commands.registerCommand('vs-lihkg.more.more', this.more);
