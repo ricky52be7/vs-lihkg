@@ -3,14 +3,6 @@ const { LihkgTreeDataProvider } = require('./providers/TreeDataProvider');
 const { LihkgTextDocContentProvider } = require('./providers/ContentProvider');
 const { CommandContext, Constants, languageId } = require('./constants');
 
-async function updateDocumentLang() {
-    const document = vscode.window.activeTextEditor?.document;
-
-    if (document?.uri?.scheme != Constants.SCHEME)
-        return
-    await vscode.languages.setTextDocumentLanguage(document, languageId);
-}
-
 class LihkgExplorer {
 
     constructor(context) {
@@ -28,8 +20,6 @@ class LihkgExplorer {
         this.statusBarView = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
         this.statusBarView.command = 'vs-lihkg.topic.jumpPage';
         vscode.window.onDidChangeActiveTextEditor(this.updateStatusBarItem)
-        const _updateLangDisposable = vscode.window.onDidChangeActiveTextEditor(updateDocumentLang)
-
 
         vscode.commands.registerCommand('vs-lihkg.more.more', this.more);
         vscode.commands.registerCommand('vs-lihkg.topic.showTopic', this.showTopic);
@@ -57,11 +47,13 @@ class LihkgExplorer {
     }
 
     async showPage(threadId, totalPage, page) {
-        let document = vscode.window.activeTextEditor.document;
+        const document = vscode.window.activeTextEditor.document;
+        const newUri = document.uri.with({ path: `${threadId}:${page}:${totalPage}` });
+
         await vscode.commands.executeCommand("setContext", CommandContext.maxPage, (totalPage <= page));
         await vscode.commands.executeCommand("setContext", CommandContext.firstPage, (1 == page));
-        let newUri = document.uri.with({ path: `${threadId}:${page}:${totalPage}` });
         await vscode.window.showTextDocument(newUri, { preview: true });
+        await vscode.languages.setTextDocumentLanguage(document, languageId);
     }
 
     more(more) {

@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const { create } = require('lihkg-api');
+const { languageId } = require('../constants');
 
 class Category extends vscode.TreeItem {
     constructor(label, collapsibleState, catId, subCategory) {
@@ -40,7 +41,7 @@ class SubCategory extends vscode.TreeItem {
                 vscode.window.showErrorMessage(rst.error_message);
             }
             return this.topics;
-        }); 
+        });
     }
 
     nextPage() {
@@ -78,9 +79,11 @@ class Topic extends vscode.TreeItem {
     }
 
     async showTopic() {
-        let uri = vscode.Uri.parse(`vs-lihkg:${this.threadId}:${this.page}:${this.totalPage}`);
-        let doc = await vscode.workspace.openTextDocument(uri);
-        await vscode.window.showTextDocument(doc, {preview: true});
+        const uri = vscode.Uri.parse(`vs-lihkg:${this.threadId}:${this.page}:${this.totalPage}`);
+        const doc = await vscode.workspace.openTextDocument(uri);
+
+        await vscode.window.showTextDocument(doc, { preview: true });
+        await vscode.languages.setTextDocumentLanguage(doc, languageId);
     }
 
     openInBrowser() {
