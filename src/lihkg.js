@@ -2,6 +2,7 @@ const { create } = require("lihkg-api");
 const { PostOrder } = require("lihkg-api/dist/api");
 const { commands } = require("vscode");
 const { CommandContext } = require("./constants");
+const re = /<img src=\"((\/assets)\/(.*?)\.(.*?))\" class="hkgmoji" \/>/g
 
 function formatDate(replayTime) {
     return new Date(Number(replayTime) * 1000).toString();
@@ -9,18 +10,20 @@ function formatDate(replayTime) {
 
 /** @param {import("lihkg-api/dist/model").ContentJSON} thread */
 function transformThread({ response: { title, item_data } }) {
-    const ret = ` # ${title}
-${item_data.map(transformPost)}
+    const ret = `# ${title}
+${item_data.map(transformPost).join("")}
 `;
     return ret
 }
 
+/** @param {import("lihkg-api/dist/model").Post} post  */
 function transformPost({ reply_time, msg, user_nickname, msg_num }) {
+    const emojiParsed = msg.replace(re, '<img src="https://cdn.lihkg.com$1" class="hkgmoji" \/>')
     const metaInfo = `> ${msg_num} ${user_nickname} ${formatDate(reply_time)}`
     const ret = `
 ${metaInfo}
 
-${msg}
+${emojiParsed}
 `
     return ret
 }
