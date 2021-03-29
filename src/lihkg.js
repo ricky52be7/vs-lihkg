@@ -3,27 +3,55 @@ const { PostOrder } = require("lihkg-api/dist/api");
 const { commands } = require("vscode");
 const { CommandContext } = require("./constants");
 const re = /<img src=\"((\/assets)\/(.*?)\.(.*?))\" class="hkgmoji" \/>/g
+const style = `
+<link>
+<style>
+.post{
+    display: flex;
+}
+.like{
+    display: flex;
+    justify-content: space-between;
+}
+.like > span{
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    cursor: pointer;
+    color: gray;
+}
+</style>
+`
 
 function formatDate(replayTime) {
     return new Date(Number(replayTime) * 1000).toString();
 }
 
 /** @param {import("lihkg-api/dist/model").ContentJSON} thread */
-function transformThread({ response: { title, item_data } }) {
-    const ret = `# ${title}
+function transformThread({ response: { title, item_data, like_count, dislike_count } }) {
+    // main post's like is same as thread's like 
+    Object.assign(item_data[0], { like_count, dislike_count })
+    const ret = `${style}
+# ${title}
 ${item_data.map(transformPost).join("")}
 `;
     return ret
 }
 
 /** @param {import("lihkg-api/dist/model").Post} post  */
-function transformPost({ reply_time, msg, user_nickname, msg_num }) {
+function transformPost({ reply_time, msg, user_nickname, msg_num, like_count, dislike_count }) {
     const emojiParsed = msg.replace(re, '<img src="https://cdn.lihkg.com$1" class="hkgmoji" \/>')
     const metaInfo = `> ${msg_num} ${user_nickname} ${formatDate(reply_time)}`
+    const comment = `<span>▲${like_count}</span><span>▼${dislike_count}</span>`
     const ret = `
 ${metaInfo}
-
-${emojiParsed}
+<div class="post">
+    <div class="like">
+        ${comment}
+    </div>
+    <div>
+        ${emojiParsed}
+    </div>
+</div>
 `
     return ret
 }

@@ -34,7 +34,7 @@ class SubCategory extends vscode.TreeItem {
             console.log(rst);
             if (rst.success == 1) {
                 rst.response.items.forEach(topic => {
-                    this.topics.push(new Topic(topic.title, vscode.TreeItemCollapsibleState.None, topic.thread_id, topic.total_page));
+                    this.topics.push(new Topic(topic, vscode.TreeItemCollapsibleState.None));
                 });
             } else {
                 vscode.window.showErrorMessage(rst.error_message);
@@ -64,17 +64,22 @@ class SubCategory extends vscode.TreeItem {
     }
 }
 class Topic extends vscode.TreeItem {
-    constructor(label, collapsibleState, threadId, totalPage) {
-        super(label, collapsibleState);
+    /**
+     * @param {import('lihkg-api/dist/model').Thread} param0 
+     * @param {*} collapsibleState 
+     */
+    constructor({ title, thread_id, total_page, like_count, dislike_count }, collapsibleState = vscode.TreeItemCollapsibleState.None) {
+        super(title, collapsibleState);
         this.contextValue = "topic";
         this.command = {
             command: 'vs-lihkg.topic.showTopic',
             title: '',
             arguments: [this]
         };
-        this.threadId = threadId;
+        this.threadId = thread_id;
         this.page = 1;
-        this.totalPage = totalPage;
+        this.totalPage = total_page;
+        this.description = `▲${like_count} ▼${dislike_count}`
     }
 
     async showTopic() {
