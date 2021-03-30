@@ -34,13 +34,13 @@ class SubCategory extends vscode.TreeItem {
             console.log(rst);
             if (rst.success == 1) {
                 rst.response.items.forEach(topic => {
-                    this.topics.push(new Topic(topic.title, vscode.TreeItemCollapsibleState.None, topic.thread_id, topic.total_page));
+                    this.topics.push(new Topic(topic, vscode.TreeItemCollapsibleState.None));
                 });
             } else {
                 vscode.window.showErrorMessage(rst.error_message);
             }
             return this.topics;
-        }); 
+        });
     }
 
     nextPage() {
@@ -64,23 +64,27 @@ class SubCategory extends vscode.TreeItem {
     }
 }
 class Topic extends vscode.TreeItem {
-    constructor(label, collapsibleState, threadId, totalPage) {
-        super(label, collapsibleState);
+    /**
+     * @param {import('lihkg-api/dist/model').Thread} param0 
+     * @param {*} collapsibleState 
+     */
+    constructor({ title, thread_id, total_page, like_count, dislike_count }, collapsibleState = vscode.TreeItemCollapsibleState.None) {
+        super(title, collapsibleState);
         this.contextValue = "topic";
         this.command = {
             command: 'vs-lihkg.topic.showTopic',
             title: '',
             arguments: [this]
         };
-        this.threadId = threadId;
+        this.threadId = thread_id;
         this.page = 1;
-        this.totalPage = totalPage;
+        this.totalPage = total_page;
+        this.description = `▲${like_count} ▼${dislike_count}`
     }
 
     async showTopic() {
-        let uri = vscode.Uri.parse(`vs-lihkg:${this.threadId}:${this.page}:${this.totalPage}`);
-        let doc = await vscode.workspace.openTextDocument(uri);
-        await vscode.window.showTextDocument(doc, {preview: true});
+        const uri = vscode.Uri.parse(`vs-lihkg:${this.threadId}:${this.page}:${this.totalPage}`);
+        await vscode.commands.executeCommand("markdown.showPreview", uri);
     }
 
     openInBrowser() {
