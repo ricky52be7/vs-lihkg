@@ -1,5 +1,5 @@
 const vscode = require('vscode');
-const { LIHKG } = require('../lihkg');
+const { getThread } = require('../utils/lihkg');
 
 /**
  * @implements {vscode.TextDocumentContentProvider}
@@ -10,16 +10,17 @@ class LihkgTextDocContentProvider {
         this.onDidChange = this.onDidChangeEmitter.event;
     }
 
-    async provideTextDocumentContent(uri, token) {
-        return this.getContent(uri.path);
+    async provideTextDocumentContent(uri, _token) {
+        const { id, page } = this.extractThreadInfo(uri.path);
+        return getThread(id, page)
     }
 
-    async getContent(path) {
+    extractThreadInfo(path) {
         const dataArray = path.split(":");
         const id = dataArray[0];
         const page = Number(dataArray[1]);
-        const totlePage = Number(dataArray[2]);
-        return LIHKG.getThread(id, page, totlePage)
+        const totalPage = Number(dataArray[2]);
+        return { id, page, totalPage };
     }
 }
 
