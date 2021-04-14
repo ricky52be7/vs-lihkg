@@ -2,7 +2,7 @@
 
 A vscode extension for browsing LIHKG's posts in Java / markdown document mode.
 
-![](images/vscode-1576740187249.gif)
+![](images/vscode-6-563056b9e9de.gif)
 
 <!-- ## How to install
 
