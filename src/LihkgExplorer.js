@@ -1,8 +1,7 @@
 const vscode = require('vscode');
 const { LihkgTreeDataProvider } = require('./providers/TreeDataProvider');
-const { LihkgTextDocContentProvider } = require('./providers/ContentProvider');
+const { LihkgTextDocContentProvider, LihkgMarkdownContentProvider } = require('./providers/ContentProvider');
 const { CommandContext, Constants } = require('./constants');
-
 class LihkgExplorer {
 
     constructor(context) {
@@ -20,8 +19,6 @@ class LihkgExplorer {
         this.statusBarView = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
         this.statusBarView.command = 'vs-lihkg.topic.jumpPage';
         vscode.window.onDidChangeActiveTextEditor(this.updateStatusBarItem)
-        //this.updateStatusBarItem();
-
 
         vscode.commands.registerCommand('vs-lihkg.more.more', this.more);
         vscode.commands.registerCommand('vs-lihkg.topic.showTopic', this.showTopic);
@@ -31,12 +28,13 @@ class LihkgExplorer {
         vscode.commands.registerCommand('vs-lihkg.topic.openInBrowser', this.openInBrowser);
         vscode.commands.registerCommand('vs-lihkg.topic.jumpPage', this.jumpPage);
 
-        vscode.workspace.registerTextDocumentContentProvider(Constants.SCHEME, new LihkgTextDocContentProvider);
+        vscode.workspace.registerTextDocumentContentProvider(Constants.SCHEME_JAVA, new LihkgTextDocContentProvider);
+        vscode.workspace.registerTextDocumentContentProvider(Constants.SCHEME_MARKDOWN, new LihkgMarkdownContentProvider);
     }
 
     updateStatusBarItem() {
         let uri = vscode.window.activeTextEditor.document.uri;
-        if (uri.scheme === Constants.SCHEME) {
+        if (uri.scheme === Constants.SCHEME_JAVA) {
             let dataArray = uri.path.split(":");
             let page = Number(dataArray[1]);
             let totlePage = Number(dataArray[2]);
@@ -48,11 +46,14 @@ class LihkgExplorer {
         }
     }
 
+        // only called by java style
     async showPage(threadId, totalPage, page) {
-        let document = vscode.window.activeTextEditor.document;
+        const document = vscode.window.activeTextEditor.document;
+        const newUri = document.uri.with({ path: `${threadId}:${page}:${totalPage}` });
+
         await vscode.commands.executeCommand("setContext", CommandContext.maxPage, (totalPage <= page));
         await vscode.commands.executeCommand("setContext", CommandContext.firstPage, (1 == page));
-        let newUri = document.uri.with({ path: `${threadId}:${page}:${totalPage}` });
+        // await vscode.commands.executeCommand("markdown.showPreview", newUri);
         await vscode.window.showTextDocument(newUri, { preview: true });
     }
 

@@ -2,6 +2,7 @@ const vscode = require('vscode');
 const { create, PostOrder } = require('lihkg-api');
 const htmlToText = require('html-to-text');
 const { CommandContext } = require('../constants');
+const { getThread } = require('../utils/lihkg');
 
 class LihkgTextDocContentProvider {
     constructor() {
@@ -9,7 +10,7 @@ class LihkgTextDocContentProvider {
         this.onDidChange = this.onDidChangeEmitter.event;
     }
 
-    provideTextDocumentContent(uri, token) {
+    async provideTextDocumentContent(uri, token) {
         return this.getContent(uri.path);
     }
 
@@ -45,6 +46,27 @@ class LihkgTextDocContentProvider {
     }
 }
 
+class LihkgMarkdownContentProvider {
+    constructor() {
+        this.onDidChangeEmitter = new vscode.EventEmitter();
+        this.onDidChange = this.onDidChangeEmitter.event;
+    }
+
+    async provideTextDocumentContent(uri, token) {
+        const { id, page } = this.extractThreadInfo(uri.path);
+        return getThread(id, page)
+    }
+
+    extractThreadInfo(path) {
+        const dataArray = path.split(":");
+        const id = dataArray[0];
+        const page = Number(dataArray[1]);
+        const totalPage = Number(dataArray[2]);
+        return { id, page, totalPage };
+    }
+}
+
 module.exports = {
-    LihkgTextDocContentProvider
+    LihkgTextDocContentProvider,
+    LihkgMarkdownContentProvider
 }

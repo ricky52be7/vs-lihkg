@@ -1,6 +1,6 @@
 # LIHKG Viewer README
 
-A vscode extension for browsing LIHKG in JAVA style.
+A vscode extension for browsing LIHKG's posts in Java / markdown document mode.
 
 ![](images/vscode-1576740187249.gif)
 
@@ -27,6 +27,9 @@ vs-code version >= 1.39.0
 None -->
 
 ## Release Notes
+
+### 0.3.0
+- add style setting to choose Java style or markdown style
 
 ### 0.2.0
 - add "open in browser"
