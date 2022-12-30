@@ -11,7 +11,11 @@
 	"version": "0.3.0",
 	"publisher": "ricky52be7",
 	"icon": "media/icon.png",
-	"keywords": ["LIHKG", "forum", "funny"],
+	"keywords": [
+		"LIHKG",
+		"forum",
+		"funny"
+	],
 	"engines": {
 		"vscode": "^1.39.0"
 	},
@@ -99,14 +103,17 @@
 				}
 			]
 		},
-		"configuration":[
+		"configuration": [
 			{
 				"title": "LIHKG Viewer",
 				"properties": {
 					"vslihkg.view.style": {
 						"type": "string",
 						"default": "JAVA",
-						"enum": ["JAVA", "Markdown"]
+						"enum": [
+							"JAVA",
+							"Markdown"
+						]
 					}
 				}
 			}
@@ -120,9 +127,9 @@
 		"@types/mocha": "^5.2.6",
 		"@types/node": "^10.12.21",
 		"@types/vscode": "^1.39.0",
-		"eslint": "^5.13.0",
+		"eslint": "^8.30.0",
 		"glob": "^7.1.4",
-		"mocha": "^6.1.4",
+		"mocha": "^10.2.0",
 		"typescript": "^3.3.1",
 		"vscode-test": "^1.2.0"
 	},
